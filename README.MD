@@ -1,6 +1,8 @@
 # auto_proxy_wifi
 
-Python Automation Script for Windows devices to configure a proxy server on a wifi network based on the network's SSID. Works using Windows environment variables, registry and CLI tools (Netsh).
+Python Automation Script for Windows devices to automatically configure a proxy server on a wifi network based on the network's SSID. Works using Windows environment variables, registry and CLI tools (Netsh).
+
+Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi network change.
 
 ## Usage
 
