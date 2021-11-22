@@ -14,4 +14,4 @@ There are two potential ways to use this script:
 
 ### Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
 
-- Run `./src/main.py` or `./src/sch_task.bat` with Administrator privileges once.
+- Run `./src/sch_task.bat` with Administrator privileges once.

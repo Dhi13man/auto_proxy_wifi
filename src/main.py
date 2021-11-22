@@ -3,12 +3,6 @@ from services.proxy_handler import ProxyHandler
 from services.system_calls import exec
 
 if __name__ == "__main__":
-    # Schedule the future tasks
-    exec(
-        "schtasks /Create /TN test /TR \"%~dp0main.py\" /SC ONEVENT /EC Microsoft-Windows-WLAN-AutoConfig/Operational /MO *[System/EventID=8001] /F",
-        verbose=True,
-    )
-
     # Proxy Rules for different networks
     proxy_rules: list = [
         ProxyRule("TP-Link", "http://172.16.199.40:8080", "http"),
