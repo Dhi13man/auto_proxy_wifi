@@ -10,6 +10,6 @@ There are two potential ways to use this script:
 
 - Just execute `./src/main_loop.py` with Python and watch the magic happen every time you switch Wi-Fi networks. :)
 
-## Using Windoes Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
+## Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
 
 - Run `./src/sch_task.bat` once with Administrator privileges.
