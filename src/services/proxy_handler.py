@@ -10,7 +10,7 @@ class ProxyHandler:
 
     def __init__(self, proxy_rules: list) -> None:
         """
-        Create an instance of ProxyHandler
+        Create an instance of ProxyHandler.
         """
         self.proxy_rules = proxy_rules
 
@@ -106,6 +106,9 @@ class ProxyHandler:
 
     @staticmethod
     def __powershell_run(cmd: str) -> str:
+        """
+        Utility function to run a command in powershell mode.
+        """
         completed = subprocess.run(["powershell", "-Command", cmd], capture_output=True)
         return completed.stdout.decode("UTF-8")
 

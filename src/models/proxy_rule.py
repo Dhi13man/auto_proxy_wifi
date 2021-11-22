@@ -7,7 +7,6 @@ import json
 class ProxyRule:
     """
     This class is used to store proxy connection rules.
-
     Attributes:
         wifi_ssid: If the name of the wifi network is equal to this string, the proxy will be used.
         proxy_address: The address of the proxy.
@@ -19,7 +18,6 @@ class ProxyRule:
     def __init__(self, wifi_ssid: str, proxy_address: str ="", proxy_type: str="") -> None:
         """
             This function is used to initialize the Proxy Rule.
-
             :param wifi_ssid: The name of the wifi network.
             :param proxy_address: The address of the proxy.
             :param proxy_type: The type of the proxy. Supported types are: http, https, socks5.
@@ -38,7 +36,6 @@ class ProxyRule:
     def from_json(json_string: str) -> 'ProxyRule':
         """
         This function is used to convert a json string to a ProxyRule.
-
         :param json_string: The json string to convert.
         :return: None
         """
@@ -47,7 +44,6 @@ class ProxyRule:
     def to_json(self) -> str:
         """
         This function is used to convert the ProxyRule to a json string.
-
         :return: The ProxyRule as a json string.
         """
         return json.dumps(self.__dict__)
