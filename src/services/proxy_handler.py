@@ -1,6 +1,8 @@
-import os, subprocess
+from os import environ
 
 from models.proxy_rule import ProxyRule
+from services.system_calls import powershell_exec_output, exec_output, exec
+
 
 class ProxyHandler:
     """
@@ -23,7 +25,7 @@ class ProxyHandler:
         for proxy_rule in self.proxy_rules:
             search_name = proxy_rule.wifi_ssid.lower()
             curr_name = wifi_name.lower()
-            if search_name in curr_name: 
+            if search_name in curr_name:
                 return proxy_rule.proxy_address
         return ""
 
@@ -41,7 +43,8 @@ class ProxyHandler:
                 # Tell user what's about to happen.
                 if verbose:
                     print("For Wi-Fi SSID: " + ssid)
-                    print(("Proxy to be set: %s" % proxy) if proxy != "" else "No Proxy!")
+                    print(("Proxy to be set: %s" % proxy)
+                          if proxy != "" else "No Proxy!")
                 # Set proxy
                 self.set_proxy(proxy)
                 old_ssid = ssid
@@ -53,18 +56,24 @@ class ProxyHandler:
         :return: None
         """
         # RegEdit
-        os.system("reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f")
+        exec(
+            "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f",
+        )
         # CMD Environment
-        os.system("set http_proxy=%s" % "")
-        os.system("set https_proxy=%s" % "")
+        exec("set http_proxy=%s" % "")
+        exec("set https_proxy=%s" % "")
         # Powershell Enviornment
-        ProxyHandler.__powershell_run("[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % "")
-        ProxyHandler.__powershell_run("[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % "")
+        powershell_exec_output(
+            "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % "",
+        )
+        powershell_exec_output(
+            "[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % "",
+        )
         # More Environment
-        os.environ["http_proxy"] = ""
-        os.environ["https_proxy"] = ""
+        environ["http_proxy"] = ""
+        environ["https_proxy"] = ""
         # Netsh
-        # os.system("netsh winhttp reset proxy")
+        # run("netsh winhttp reset proxy")
 
     @staticmethod
     def set_proxy(proxy_address: str) -> None:
@@ -77,19 +86,27 @@ class ProxyHandler:
             ProxyHandler.unset_proxy()
         else:
             # RegEdit
-            os.system("reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 1 /f")
-            os.system("reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyServer /t REG_SZ /d %s /f" % proxy_address)
+            exec(
+                "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 1 /f",
+            )
+            exec(
+                "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyServer /t REG_SZ /d %s /f" % proxy_address,
+            )
             # CMD Environment
-            os.system("set http_proxy=%s" % proxy_address)
-            os.system("set https_proxy=%s" % proxy_address)
+            exec("set http_proxy=%s" % proxy_address)
+            exec("set https_proxy=%s" % proxy_address)
             # Powershell Enviornment
-            ProxyHandler.__powershell_run("[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % proxy_address)
-            ProxyHandler.__powershell_run("[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % proxy_address)
+            powershell_exec_output(
+                "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % proxy_address,
+            )
+            powershell_exec_output(
+                "[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % proxy_address,
+            )
             # More Environment
-            os.environ["http_proxy"] = proxy_address
-            os.environ["https_proxy"] = proxy_address
+            environ["http_proxy"] = proxy_address
+            environ["https_proxy"] = proxy_address
             # Netsh
-            # os.system("netsh winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"" % proxy_address)
+            # run("netsh winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"" % proxy_address)
 
     @staticmethod
     def get_wifi_ssid() -> str:
@@ -97,18 +114,11 @@ class ProxyHandler:
         This function is used to get the SSID of the wifi network.
         :return: The name of the wifi network.
         """
-        out: str = subprocess.check_output(['netsh', 'WLAN', 'show', 'interfaces']).decode("UTF-8")
+        out: str = exec_output(
+            ['netsh', 'WLAN', 'show', 'interfaces'],
+        )
         out_lines: list = out.split("\n")
         for line in out_lines:
             if "SSID" in line and "BSSID" not in line:
                 return line.split(": ")[1]
         return ""
-
-    @staticmethod
-    def __powershell_run(cmd: str) -> str:
-        """
-        Utility function to run a command in powershell mode.
-        """
-        completed = subprocess.run(["powershell", "-Command", cmd], capture_output=True)
-        return completed.stdout.decode("UTF-8")
-
