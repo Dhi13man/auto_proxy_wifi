@@ -1,21 +1,29 @@
-from subprocess import DEVNULL, PIPE, STDOUT, check_call, check_output, run
+from subprocess import DEVNULL, STDOUT, check_call, check_output, run, CalledProcessError
 from typing import Any
 
 
 def exec(cmd: Any, verbose: bool = False) -> int:
-    return check_call(
-        cmd,
-        stdout=DEVNULL if not verbose else None,
-        stderr=STDOUT,
-        shell=True,
-    )
+    try:
+        return check_call(
+            cmd,
+            stdout=None if verbose else DEVNULL,
+            stderr=STDOUT,
+            shell=True,
+        )
+    except CalledProcessError as e:
+        if verbose: print(e)
+    
 
 
-def exec_output(cmd: Any) -> str:
-    return check_output(
-        cmd,
-        stderr=STDOUT,
-    ).decode("UTF-8")
+def exec_output(cmd: Any, verbose: bool = False) -> str:
+    try:
+        return check_output(
+            cmd,
+            stderr=STDOUT,
+        ).decode("UTF-8")
+    except CalledProcessError as e:
+        if verbose: print(e)
+
 
 
 def powershell_exec_output(cmd: Any) -> str:

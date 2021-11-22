@@ -73,7 +73,7 @@ class ProxyHandler:
         environ["http_proxy"] = ""
         environ["https_proxy"] = ""
         # Netsh
-        # run("netsh winhttp reset proxy")
+        exec("netsh winhttp reset proxy")
 
     @staticmethod
     def set_proxy(proxy_address: str) -> None:
@@ -106,7 +106,7 @@ class ProxyHandler:
             environ["http_proxy"] = proxy_address
             environ["https_proxy"] = proxy_address
             # Netsh
-            # run("netsh winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"" % proxy_address)
+            exec("netsh winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"" % proxy_address)
 
     @staticmethod
     def get_wifi_ssid() -> str:
