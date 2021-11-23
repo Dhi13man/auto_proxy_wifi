@@ -18,7 +18,7 @@ class ProxyHandler:
 
     def get_proxy_from_rules(self) -> str:
         """
-        This function is used to get the proxy address for a given wifi network.
+        This function is used to get the proxy address for the currently connected wifi network.
         :return: The address of the proxy.
         """
         wifi_name: str = self.get_wifi_ssid()
