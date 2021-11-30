@@ -8,6 +8,18 @@ Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi net
 
 There are two potential ways to use this script:
 
+- To set Proxy rules (which Proxy should be used for which Wi-Fi SSID) just modify the respective `main.py` or `main_loop.py` file and add the rule to `proxy_rules` as shown in the example rule. Should be pretty self explanatory. 
+
+  Syntax for each ProxyRule: `ProxyRule(wifi_ssid: string, proxy_address: string, proxy_type: string (optional))`.
+
+   ```python
+      proxy_rules: list = [
+          ProxyRule("wifi1", "http://proxy1:port1", "https"), # If Wi-Fi connected is wifi1, proxy should be http://proxy1:port1
+          ProxyRule("wifi2", "proxy2:port2", "socks5"),
+          ProxyRule("wifi3", ""), # If Wi-Fi connected is wifi3, there will be no proxy.
+      ]
+   ```
+
 ### Using Python Script `./src/main_loop.py` (More Memory-Intensive)
 
 - Just execute `./src/main_loop.py` with Python and watch the magic happen every time you switch Wi-Fi networks. :)
@@ -15,3 +27,4 @@ There are two potential ways to use this script:
 ### Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
 
 - Run `./src/sch_task.bat` with Administrator privileges once.
+
