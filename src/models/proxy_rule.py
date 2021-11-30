@@ -24,8 +24,11 @@ class ProxyRule:
             :return: None
         """
         if proxy_type == "":
-            components: list = proxy_address.split(":")
-            proxy_type = components[0] if len(components) > 1 else ""
+            if proxy_address == "":
+                proxy_type = "none"
+            else:
+                components: list = proxy_address.split(":")
+                proxy_type = components[0] if len(components) > 1 else ""
         if proxy_type not in ["none", "http", "https", "socks5"]:
             raise ValueError("Proxy type not supported.")
         self.proxy_type = proxy_type

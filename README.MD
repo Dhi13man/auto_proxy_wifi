@@ -8,7 +8,7 @@ Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi net
 
 There are two potential ways to use this script:
 
-- To set Proxy rules (which Proxy should be used for which Wi-Fi SSID) just modify the respective `main.py` or `main_loop.py` file and add the rule to `proxy_rules` as shown in the example rule. Should be pretty self explanatory. 
+- To set Proxy rules (which Proxy should be used for which Wi-Fi SSID) just modify the respective `main.py` or `main_loop.py` file and add the rule to `proxy_rules` as shown in the example rule. Should be pretty self explanatory.
 
   Syntax for each ProxyRule: `ProxyRule(wifi_ssid: string, proxy_address: string, proxy_type: string (optional))`.
 
@@ -27,4 +27,3 @@ There are two potential ways to use this script:
 ### Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
 
 - Run `./src/sch_task.bat` with Administrator privileges once.
-
