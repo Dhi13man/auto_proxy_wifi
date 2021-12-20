@@ -1,6 +1,5 @@
 from models.proxy_rule import ProxyRule
 from services.proxy_handler import ProxyHandler
-from services.system_calls import exec
 
 if __name__ == "__main__":
     # Proxy Rules for different networks

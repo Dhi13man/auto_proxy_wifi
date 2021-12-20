@@ -26,4 +26,8 @@ There are two potential ways to use this script:
 
 ### Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
 
-- Run `./src/sch_task.bat` with Administrator privileges once.
+- Run `./src/setup.py` once and everything will be set up. :)
+
+## Additional Notes
+
+- Wi-Fi names in Proxy Rules are case-insensitive.
