@@ -72,8 +72,8 @@ class ProxyHandler:
         # More Environment
         environ["http_proxy"] = ""
         environ["https_proxy"] = ""
-        # Netsh
-        exec("netsh winhttp reset proxy")
+        # Netsh (requires admin)
+        powershell_exec_output("Start-Process netsh.exe -ArgumentList 'winhttp reset proxy' -Verb runas")
 
     @staticmethod
     def set_proxy(proxy_address: str) -> None:
@@ -105,8 +105,11 @@ class ProxyHandler:
             # More Environment
             environ["http_proxy"] = proxy_address
             environ["https_proxy"] = proxy_address
-            # Netsh
-            exec("netsh winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"" % proxy_address)
+            # Netsh (requires admin)
+            powershell_exec_output(
+                "Start-Process netsh.exe -ArgumentList 'winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"' -Verb runas"
+                % proxy_address,
+            )
 
     @staticmethod
     def get_wifi_ssid() -> str:
