@@ -138,7 +138,7 @@ class ProxyHandler:
         None
         """
         if proxy_address == "":
-            ProxyHandler.unset_proxy()
+            self.unset_proxy()
         else:
             # RegEdit
             exec(
