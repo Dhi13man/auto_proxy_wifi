@@ -7,19 +7,57 @@ from services.system_calls import powershell_exec_output, exec_output, exec
 class ProxyHandler:
     """
     This class is used to change the device proxy settings based on proxy connection rules.
+
+    Attributes
+    ----------
+    proxy_rules : list
+        A list of ProxyRule objects to be used for proxy setting.
+    ask_admin_permission : bool
+        Whether to ask for admin permission to set use netsh.exe. Won't configure netsh if set to False.
+
+    Methods
+    -------
+    get_proxy_from_rules()
+        This function is used to get the proxy address for the currently connected wifi network.
+    set_proxy_event_loop(verbose: bool = True)
+        Begins the proxy setting infinite event loop.
+    unset_proxy()
+        This function is used to unset the proxy address.
+    set_proxy(proxy_address: str)
+        This function is used to set the proxy address.
+    get_wifi_ssid()
+        This function is used to get the SSID of the currently connected wifi network.
     """
     proxy_rules: list
+    ask_admin_permission: bool = True
 
-    def __init__(self, proxy_rules: list) -> None:
+    def __init__(self, proxy_rules: list, ask_admin_permission: bool = True) -> 'ProxyHandler':
         """
         Create an instance of ProxyHandler.
+
+        Parameters
+        ----------
+        proxy_rules : list
+            A list of ProxyRule objects to be used for proxy setting.
+        ask_admin_permission : bool
+            Whether to ask for admin permission to set use netsh.exe. Won't configure netsh if set to False.
+
+        Returns
+        -------
+        ProxyHandler
+            An instance of ProxyHandler with the given proxy rules.
         """
         self.proxy_rules = proxy_rules
+        self.ask_admin_permission = ask_admin_permission
 
     def get_proxy_from_rules(self) -> str:
         """
         This function is used to get the proxy address for the currently connected wifi network.
-        :return: The address of the proxy.
+
+        Returns
+        -------
+        str
+            The address of the proxy.
         """
         wifi_name: str = self.get_wifi_ssid()
         # Strict Search
@@ -33,8 +71,15 @@ class ProxyHandler:
     def set_proxy_event_loop(self, verbose: bool = True) -> None:
         """
         Begins the proxy setting infinite event loop.
-        :param verbose: Whether to tell user when proxy changes
-        :return: None
+
+        Parameters
+        ----------
+        verbose : bool
+            Whether to tell user when proxy changes.
+        
+        Returns
+        -------
+        None
         """
         old_ssid: str = ProxyHandler.get_wifi_ssid()
         while True:
@@ -50,11 +95,13 @@ class ProxyHandler:
                 self.set_proxy(proxy)
                 old_ssid = ssid
 
-    @staticmethod
-    def unset_proxy() -> None:
+    def unset_proxy(self) -> None:
         """
         This function is used to unset the proxy address.
-        :return: None
+        
+        Returns
+        -------
+        None
         """
         # RegEdit
         exec(
@@ -74,14 +121,21 @@ class ProxyHandler:
         environ["http_proxy"] = ""
         environ["https_proxy"] = ""
         # Netsh (requires admin)
-        powershell_exec_output('Start-Process netsh.exe -ArgumentList "winhttp reset proxy" -Verb runas')
+        if self.ask_admin_permission:
+            powershell_exec_output('Start-Process netsh.exe -ArgumentList "winhttp reset proxy" -Verb runas')
 
-    @staticmethod
-    def set_proxy(proxy_address: str) -> None:
+    def set_proxy(self, proxy_address: str) -> None:
         """
         This function is used to set the proxy address.
-        :param proxy_address: The address of the proxy.
-        :return: None
+
+        Parameters
+        ----------
+        proxy_address : str
+            The address of the proxy.
+        
+        Returns
+        -------
+        None
         """
         if proxy_address == "":
             ProxyHandler.unset_proxy()
@@ -107,16 +161,21 @@ class ProxyHandler:
             environ["http_proxy"] = proxy_address
             environ["https_proxy"] = proxy_address
             # Netsh (requires admin)
-            powershell_exec_output(
-                "Start-Process netsh.exe -ArgumentList 'winhttp set proxy proxy-server=\"%s\" bypass-list=\"*.local;<local>\"' -Verb runas"
-                % proxy_address,
-            )
+            if self.ask_admin_permission:
+                powershell_exec_output(
+                    "Start-Process netsh.exe -ArgumentList 'winhttp set proxy proxy-server=\"%s\" bypass-list=\"*.local;<local>\"' -Verb runas"
+                    % proxy_address,
+                )
 
     @staticmethod
     def get_wifi_ssid() -> str:
         """
         This function is used to get the SSID of the wifi network.
-        :return: The name of the wifi network.
+
+        Returns
+        -------
+        str
+            The name (SSID) of the currently connected wifi network.
         """
         out: str = exec_output(
             ['netsh', 'WLAN', 'show', 'interfaces'],

@@ -9,7 +9,7 @@ if __name__ == "__main__":
     ]
 
     # Initialize data
-    proxy_handler: ProxyHandler = ProxyHandler(proxy_rules)
+    proxy_handler: ProxyHandler = ProxyHandler(proxy_rules, ask_admin_permission=True)
     proxy: str = proxy_handler.get_proxy_from_rules()
 
     # Tell user what's about to happen.
