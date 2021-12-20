@@ -22,10 +22,11 @@ class ProxyHandler:
         :return: The address of the proxy.
         """
         wifi_name: str = self.get_wifi_ssid()
+        # Strict Search
         for proxy_rule in self.proxy_rules:
             search_name = proxy_rule.wifi_ssid.lower()
             curr_name = wifi_name.lower()
-            if search_name in curr_name:
+            if search_name == curr_name:
                 return proxy_rule.proxy_address
         return ""
 
