@@ -4,11 +4,9 @@ Python Automation Script for Windows devices to automatically configure a proxy 
 
 Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi network change.
 
-## Usage
+## Set-Up and Usage
 
-There are two potential ways to use this script:
-
-- To set Proxy rules (which Proxy should be used for which Wi-Fi SSID) just modify the respective `main.py` or `main_loop.py` file and add the rule to `proxy_rules` as shown in the example rule. Should be pretty self explanatory.
+- To set Proxy rules (which Proxy should be used for which Wi-Fi SSID) just modify the respective `main.py` or `main_loop.py` file and add the rule to `proxy_rules` as shown in the example rule. Wi-Fi names in Proxy Rules are case-insensitive.
 
   Syntax for each ProxyRule: `ProxyRule(wifi_ssid: string, proxy_address: string, proxy_type: string (optional))`.
 
@@ -20,14 +18,17 @@ There are two potential ways to use this script:
       ]
    ```
 
-### Using Python Script `./src/main_loop.py` (More Memory-Intensive)
+- There are two potential ways to use this script:
 
-- Just execute `./src/main_loop.py` with Python and watch the magic happen every time you switch Wi-Fi networks. :)
+  1. **Using Python Script `./src/main_loop.py` (More Memory-Intensive)**
 
-### Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)
+     - Just execute `./src/main_loop.py` with Python and watch the magic happen every time you switch Wi-Fi networks. :)
 
-- Run `./src/setup.py` once and everything will be set up. :)
+  2. **Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)**
 
-## Additional Notes
+     - Run `./src/setup.py` once and everything will be set up. :)
 
-- Wi-Fi names in Proxy Rules are case-insensitive.
+## Removal
+
+- To Disable the script, just run `./src/disable.bat` and the scheduled event will be disabled.
+- To Uninstall, remove this auto_proxy_wifi folder with all its contents.
