@@ -57,23 +57,23 @@ class ProxyHandler:
         """
         # RegEdit
         exec(
-            "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f",
+            'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /f',
         )
         # CMD Environment
-        exec("setx http_proxy %s" % "")
-        exec("setx https_proxy %s" % "")
+        exec('setx http_proxy "%s"' % '')
+        exec('setx https_proxy "%s"' % '')
         # Powershell Enviornment
         powershell_exec_output(
-            "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % "",
+            '[System.Environment]::SetEnvironmentVariable("http_proxy","%s")' % '',
         )
         powershell_exec_output(
-            "[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % "",
+            '[System.Environment]::SetEnvironmentVariable("https_proxy","%s")' % '',
         )
         # More Environment
         environ["http_proxy"] = ""
         environ["https_proxy"] = ""
         # Netsh (requires admin)
-        powershell_exec_output("Start-Process netsh.exe -ArgumentList 'winhttp reset proxy' -Verb runas")
+        powershell_exec_output('Start-Process netsh.exe -ArgumentList "winhttp reset proxy" -Verb runas')
 
     @staticmethod
     def set_proxy(proxy_address: str) -> None:
@@ -87,27 +87,27 @@ class ProxyHandler:
         else:
             # RegEdit
             exec(
-                "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 1 /f",
+                'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f',
             )
             exec(
-                "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyServer /t REG_SZ /d %s /f" % proxy_address,
+                'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d %s /f' % proxy_address,
             )
             # CMD Environment
-            exec("setx http_proxy %s" % proxy_address)
-            exec("setx https_proxy %s" % proxy_address)
+            exec('setx http_proxy "%s"' % proxy_address)
+            exec('setx https_proxy "%s"' % proxy_address)
             # Powershell Enviornment
             powershell_exec_output(
-                "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % proxy_address,
+                '[System.Environment]::SetEnvironmentVariable("http_proxy","%s")' % proxy_address,
             )
             powershell_exec_output(
-                "[System.Environment]::SetEnvironmentVariable(\"https_proxy\",\"%s\")" % proxy_address,
+                '[System.Environment]::SetEnvironmentVariable("https_proxy","%s")' % proxy_address,
             )
             # More Environment
             environ["http_proxy"] = proxy_address
             environ["https_proxy"] = proxy_address
             # Netsh (requires admin)
             powershell_exec_output(
-                "Start-Process netsh.exe -ArgumentList 'winhttp set proxy proxy-server=%s bypass-list=\"*.local;<local>\"' -Verb runas"
+                'Start-Process netsh.exe -ArgumentList "winhttp set proxy proxy-server=%s bypass-list="*.local;<local>"" -Verb runas'
                 % proxy_address,
             )
 
