@@ -24,8 +24,8 @@ class ProxyHandler:
         wifi_name: str = self.get_wifi_ssid()
         # Strict Search
         for proxy_rule in self.proxy_rules:
-            search_name = proxy_rule.wifi_ssid.lower()
-            curr_name = wifi_name.lower()
+            search_name: str = str(proxy_rule.wifi_ssid).lower().lstrip().rstrip()
+            curr_name: str = wifi_name.lower().lstrip().rstrip()
             if search_name == curr_name:
                 return proxy_rule.proxy_address
         return ""
@@ -108,7 +108,7 @@ class ProxyHandler:
             environ["https_proxy"] = proxy_address
             # Netsh (requires admin)
             powershell_exec_output(
-                'Start-Process netsh.exe -ArgumentList "winhttp set proxy proxy-server=%s bypass-list="*.local;<local>"" -Verb runas'
+                "Start-Process netsh.exe -ArgumentList 'winhttp set proxy proxy-server=\"%s\" bypass-list=\"*.local;<local>\"' -Verb runas"
                 % proxy_address,
             )
 
