@@ -60,8 +60,8 @@ class ProxyHandler:
             "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyEnable /t REG_DWORD /d 0 /f",
         )
         # CMD Environment
-        exec("set http_proxy=%s" % "")
-        exec("set https_proxy=%s" % "")
+        exec("setx http_proxy %s" % "")
+        exec("setx https_proxy %s" % "")
         # Powershell Enviornment
         powershell_exec_output(
             "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % "",
@@ -93,8 +93,8 @@ class ProxyHandler:
                 "reg add \"HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\" /v ProxyServer /t REG_SZ /d %s /f" % proxy_address,
             )
             # CMD Environment
-            exec("set http_proxy=%s" % proxy_address)
-            exec("set https_proxy=%s" % proxy_address)
+            exec("setx http_proxy %s" % proxy_address)
+            exec("setx https_proxy %s" % proxy_address)
             # Powershell Enviornment
             powershell_exec_output(
                 "[System.Environment]::SetEnvironmentVariable(\"http_proxy\",\"%s\")" % proxy_address,
