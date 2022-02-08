@@ -1,7 +1,7 @@
 from os import environ
 
 from models.proxy_rule import ProxyRule
-from services.system_calls import powershell_exec_output, exec_output, exec
+from services.system_calls import powershell_exec_output, exec_output, exec_code
 
 
 class ProxyHandler:
@@ -104,12 +104,12 @@ class ProxyHandler:
         None
         """
         # RegEdit
-        exec(
+        exec_code(
             'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 0 /f',
         )
         # CMD Environment
-        exec('setx http_proxy "%s"' % '')
-        exec('setx https_proxy "%s"' % '')
+        exec_code('setx http_proxy "%s"' % '')
+        exec_code('setx https_proxy "%s"' % '')
         # Powershell Enviornment
         powershell_exec_output(
             '[System.Environment]::SetEnvironmentVariable("http_proxy","%s")' % '',
@@ -141,15 +141,15 @@ class ProxyHandler:
             self.unset_proxy()
         else:
             # RegEdit
-            exec(
+            exec_code(
                 'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyEnable /t REG_DWORD /d 1 /f',
             )
-            exec(
+            exec_code(
                 'reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings" /v ProxyServer /t REG_SZ /d %s /f' % proxy_address,
             )
             # CMD Environment
-            exec('setx http_proxy "%s"' % proxy_address)
-            exec('setx https_proxy "%s"' % proxy_address)
+            exec_code('setx http_proxy "%s"' % proxy_address)
+            exec_code('setx https_proxy "%s"' % proxy_address)
             # Powershell Enviornment
             powershell_exec_output(
                 '[System.Environment]::SetEnvironmentVariable("http_proxy","%s")' % proxy_address,

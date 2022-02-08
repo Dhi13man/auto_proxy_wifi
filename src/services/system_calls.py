@@ -2,7 +2,7 @@ from subprocess import DEVNULL, STDOUT, check_call, check_output, run, CalledPro
 from typing import Any
 
 
-def exec(cmd: Any, verbose: bool = False) -> int:
+def exec_code(cmd: Any, verbose: bool = False) -> int:
     """
     Utility function to execute a command in bash and return the exit code.
 
@@ -51,7 +51,8 @@ def exec_output(cmd: Any, verbose: bool = False) -> str:
             stderr=STDOUT,
         ).decode("UTF-8")
     except CalledProcessError as e:
-        if verbose: print(e)
+        if verbose:
+            print(e)
 
 
 def powershell_exec_output(cmd: Any) -> str:
