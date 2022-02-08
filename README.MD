@@ -28,7 +28,16 @@ Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi net
 
      - Run `./src/setup.py` once and everything will be set up. :)
 
+| ![Setup Complete](screenshots/setup_complete.png) |
+| --- |
+
+| ![Example Usage](screenshots/change.png) |
+| --- |
+
 ## Removal
 
 - To Disable the script, just run `./src/disable.bat` and the scheduled event will be disabled.
 - To Uninstall, remove this auto_proxy_wifi folder with all its contents.
+
+| ![Disabling the Script](screenshots/disable.png) |
+| --- |
