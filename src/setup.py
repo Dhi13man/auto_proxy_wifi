@@ -1,5 +1,5 @@
 from os import getcwd, remove
-from services.system_calls import powershell_exec_output
+from services.system_calls import exec_output
 
 
 def generate_sch_task_config_xml(input_template_xml_name: str = "sch_task_config_template.xml") -> None:
@@ -29,7 +29,7 @@ if __name__ == "__main__":
     generate_sch_task_config_xml()
 
     # Set up the scheduled task with the generated XML
-    out: str = powershell_exec_output('schtasks /Create /TN auto_proxy /F /XML "./sch_task_config.xml"')
+    out: str = exec_output('schtasks /Create /TN auto_proxy /F /XML "./sch_task_config.xml"')
     # Below command is simple but doesn't work if laptop on battery
     # schtasks /Create /TN auto_proxy /TR "%~dp0main.py" /SC ONEVENT /EC Microsoft-Windows-WLAN-AutoConfig/Operational /MO *[System/EventID=8001]
 
