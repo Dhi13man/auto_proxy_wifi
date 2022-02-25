@@ -26,7 +26,8 @@ Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi net
 
   2. **Using Windows Scheduled Task Triggering with `./src/main.py` (Less Memory-Intensive)**
 
-     - Run `./src/setup.py` once and everything will be set up. :)
+     - Open any terminal and CD into src folder `cd <path_to_repo>/src`.
+     - Run `python3 ./setup.py` once and everything will be set up. :)
 
 | ![Setup Complete](screenshots/setup_complete.png) |
 | --- |
