@@ -42,3 +42,11 @@ Utilizes Windows `schtasks` CLI tool for automatic event scheduling on Wi-Fi net
 
 | ![Disabling the Script](screenshots/disable.png) |
 | --- |
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## License
+
+See [LICENSE.md](LICENSE.md).
